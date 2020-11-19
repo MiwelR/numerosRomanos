@@ -63,3 +63,69 @@ def romano_a_entero(romano):
         suma = suma + simbolo_a_entero(letra)
         valor_anterior = letra    
     return suma
+
+# Funciones para conversión de números enteros a romanos:
+
+def descomponer(numero):
+    if not isinstance(numero, int):
+        raise SyntaxError(f"{numero} no es un número natural")
+
+    l = []
+    for n in str(numero):
+        l.append(int(n))
+    return l
+'''
+# DESCOMPOSICIÓN USANDO ENTEROS
+
+def descomponer(numero):
+    l = []
+    for pot in (1000, 100, 10):
+        l.append(numero // pot)
+        numero %= pot
+
+    
+    l.append(numero)
+
+    return l
+'''
+
+millares = ('M',)
+centenas = ('C', 'D', 'M')
+decenas = ('X', 'L', 'C')
+unidades = ('I', 'V', 'X')
+ordenes = [unidades, decenas, centenas, millares]
+
+def convertir(ordenes_magnitud):
+    contador = 0
+    resultado = []
+    for orden in ordenes_magnitud[::-1]:
+        resultado.append(procesar_simbolo(orden, ordenes[contador]))
+        contador += 1
+
+    return ''.join(reversed(resultado))
+
+
+def procesar_simbolo(s, clave):
+    if s == 9:
+        return clave[0] + clave[2]
+    elif s >= 5:
+        return clave[1] + clave[0] * (s-5)
+    elif s == 4:
+        return clave[0] + clave[1]
+    else:
+        return clave[0] * s
+
+
+def entero_a_romano(numero):
+    if not isinstance(numero, int):
+        raise SyntaxError(f"{numero} no es un número natural")
+
+    if numero < 1 or numero > 3999:
+        raise OverflowError(f"{numero} ha de estar entre 1 y 3999")
+
+    ordenes_de_magnitud = descomponer(numero)
+    romano = convertir(ordenes_de_magnitud)
+    return romano
+
+
+
